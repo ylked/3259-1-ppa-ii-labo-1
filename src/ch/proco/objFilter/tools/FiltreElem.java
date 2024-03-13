@@ -7,7 +7,15 @@ public class FiltreElem {
 	
 	private int idField;
 	private String value;
-	
+
+	public FiltreElem() {
+	}
+
+	public FiltreElem(int idField, String value) {
+		this.idField = idField;
+		this.value = value;
+	}
+
 	public int getIdField() {
 		return idField;
 	}
