@@ -1,9 +1,11 @@
 package ch.proco.objFilter.linaire;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import ch.proco.objFilter.tools.Elem;
+import ch.proco.objFilter.tools.Filtre;
 import ch.proco.objFilter.tools.FiltreElem;
 
 /**
@@ -19,7 +21,11 @@ public class LinSearch {
 	 * @return si existe return le champ trouvé, sinon null
 	 */
 	public static Elem trouve (Elem[] data, List<FiltreElem> filters) {
-		//TODO
+		for(Elem e : data){
+			if(Filtre.filtre(e, filters)){
+				return e;
+			}
+		}
 		return null;
 	}
 	
@@ -30,8 +36,15 @@ public class LinSearch {
 	 * @return si existe return le(s) champ(s) trouvé(s), sinon liste vide
 	 */
 	public static List<Elem> trouveTous (Elem[] data,  List<FiltreElem> filters) {
-		//TODO
-		return new ArrayList<Elem>();
+		List<Elem> found = new LinkedList<>();
+
+		for(Elem e : data){
+			if(Filtre.filtre(e, filters)){
+				found.add(e);
+			}
+		}
+
+		return found;
 	}
 
 }
