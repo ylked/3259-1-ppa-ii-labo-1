@@ -1,0 +1,89 @@
+#!/bin/bash
+
+LOCAL="--local"
+DOCKER="--docker"
+LINEAR="--linear"
+CONCURRENT="--concurrent"
+BOTH="--both"
+
+LINEAR_COMMAND="mvn compile exec:java -Plinear"
+CONCURRENT_COMMAND="mvn compile exec:java -Pconcurrent"
+
+DOCKER_IMAGE="maven:3.9-eclipse-temurin-21"
+LINEAR_DOCKER_COMMAND="docker run -it --rm -v $(pwd):/usr/src/labo1 -w /usr/src/labo1 $DOCKER_IMAGE $LINEAR_COMMAND"
+CONCURRENT_DOCKER_COMMAND="docker run -it --rm -v $(pwd):/usr/src/labo1 -w /usr/src/labo1 $DOCKER_IMAGE $CONCURRENT_COMMAND"
+
+usage(){
+	echo 
+	echo ========== USAGE ============ 
+	echo "$0 <mode> [target]"
+	echo mode can be either --concurrent, --linear or --both
+	echo target is optional and can be either --local or --docker
+	echo if target is left blank, script is run in local
+	echo 
+	echo Dependencies : 
+	echo     - to use local mode, maven is required
+	echo 	 - to use docker mode, docker must be installed
+	echo
+	echo =============================
+	echo
+}
+
+if [[ $# -eq 1 && $1 == "--help" ]]; then
+	usage
+	exit 10
+fi
+
+if [[ $# -ne 1 && $# -ne 2 ]]; then
+	echo ERROR 
+	usage
+	exit 11
+fi
+	
+if [[ $# -eq 1 ]]; then
+	target=$LOCAL
+	mode=$1
+else
+	mode=$1
+	target=$2
+
+fi
+
+if [[ $mode != $LINEAR && $mode != $CONCURRENT && $mode != $BOTH ]]; then
+	echo ERROR invalid mode "$mode"
+	usage
+	exit 3
+fi
+
+if [[ $target != $LOCAL && $target != $DOCKER ]]; then
+	echo ERROR invalid target "$target"
+	usage
+	exit 4
+fi
+
+
+if [[ $target == $LOCAL ]]; then
+	mvn -v > /dev/null || (echo "ERROR maven is not installed"; exit 1)
+	
+	if [[ $mode == $LINEAR || $mode == $BOTH ]]; then
+		echo INFO running in linear mode on local
+		$LINEAR_COMMAND
+    fi
+	if [[ $mode == $CONCURRENT || $mode == $BOTH ]]; then
+		echo INFO running in concurrent mode on local
+		$CONCURRENT_COMMAND
+	fi
+	
+else
+	docker -v > /dev/null || (echo "ERROR docker is not installed"; exit 2) 
+
+	if [[ $mode == $LINEAR || $mode == $BOTH ]]; then
+		echo INFO running in linear mode on docker
+		$LINEAR_DOCKER_COMMAND
+	fi
+	if [[ $mode == $CONCURRENT || $mode == $BOTH ]]; then
+		echo INFO running in concurrent mode on docker
+		$CONCURRENT_DOCKER_COMMAND
+	fi
+fi
+
