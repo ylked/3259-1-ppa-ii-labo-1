@@ -85,7 +85,7 @@ public class ConcMain {
         runTest("test5", true);
         runTest("test6", true);
 
-        collector.saveAsCSV("results-analyzer/concSearchResults.csv");
+        collector.saveAsCSV("concSearchResults.csv");
     }
 
 
