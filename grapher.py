@@ -80,7 +80,9 @@ def plot_data(header, names, data, linear_data=None):
     plt.legend(framealpha=1.0)
 
     if save:
-        filename = "./results/result-" + str(time.time()) + ".png"
+        import platform
+        osname = platform.system()
+        filename = "./results/result_" + osname + "_" + str(int(time.time()*1000)) + ".png"
         plt.savefig(filename)
         print("INFO saved the figure in " + filename)
     else:
