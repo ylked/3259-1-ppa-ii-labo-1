@@ -83,7 +83,10 @@ public class LinMain {
         runTest("test5", true);
         runTest("test6", true);
 
-        collector.saveAsCSV("lineSearchResults.csv");
+        String filenmame = ResultCollector.getFilenameLinear();
+        collector.saveAsCSV(filenmame);
+
+        System.out.println("Results saved in " + ResultCollector.PATH + filenmame);
     }
 
 

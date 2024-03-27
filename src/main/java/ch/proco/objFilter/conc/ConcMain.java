@@ -85,7 +85,10 @@ public class ConcMain {
         runTest("test5", true);
         runTest("test6", true);
 
-        collector.saveAsCSV("concSearchResults.csv");
+        String filename = ResultCollector.getFilenameConcurrent();
+        collector.saveAsCSV(filename);
+
+        System.out.println("Results saved in " + ResultCollector.PATH + filename);
     }
 
 

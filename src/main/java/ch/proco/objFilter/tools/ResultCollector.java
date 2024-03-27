@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 public class ResultCollector {
     private String[] header;
     private List<String[]> lines;
+    public static final String PATH = "results/";
 
     /**
      * Create a new ResultCollector
@@ -89,11 +90,34 @@ public class ResultCollector {
      * <strong>Source</strong> : <a href="https://www.baeldung.com/java-csv"><em>"How to Write to a CSV File in Java"</em>, Baeldung</a>
      */
     public void saveAsCSV(String filename) throws FileNotFoundException {
-        File outputFile = new File(filename);
+        createDirectoryIfNotExists();
+        File outputFile = new File(PATH + filename);
         try (PrintWriter pw = new PrintWriter(outputFile)) {
             pw.println(toCsv(header));
             lines.stream().map(this::toCsv).forEach(pw::println);
         }
         assert outputFile.exists();
+    }
+
+    private static String getOsName(){
+        return System.getProperty("os.name").replace(" ", "_");
+    }
+
+    public static String getFilenameConcurrent(){
+        long time = System.currentTimeMillis();
+        String os = getOsName();
+        return "conc_search_results_" + os + "_" + time + ".csv";
+    }
+    public static String getFilenameLinear(){
+        long time = System.currentTimeMillis();
+        String os = getOsName();
+        return "lin_search_results_" + os + "_" + time + ".csv";
+    }
+
+    private static void createDirectoryIfNotExists(){
+        File directory = new File(PATH);
+        if (!directory.exists()){
+            directory.mkdirs();
+        }
     }
 }
