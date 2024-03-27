@@ -8,3 +8,21 @@ data
 out/
 
 target/
+
+results/
+
+doc/report.aux
+
+doc/report.fdb_latexmk
+
+doc/report.fls
+
+doc/report.log
+
+doc/report.out
+
+doc/report.pdf
+
+doc/report.toc
+
+output.log
