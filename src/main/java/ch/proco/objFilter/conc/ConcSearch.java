@@ -36,7 +36,7 @@ public class ConcSearch {
         FindTask task = new FindTask(data, filters, 0, data.length - 1, size);
         task.reset();
         pool.invoke(task);
-        pool.close();
+        pool.shutdown();
         return task.getSingleResult();
     }
 
@@ -54,7 +54,7 @@ public class ConcSearch {
         FindTask task = new FindTask(data, filters, 0, data.length - 1, size, true);
         task.reset();
         pool.invoke(task);
-        pool.close();
+        pool.shutdown();
         return task.getAllResults();
     }
 
