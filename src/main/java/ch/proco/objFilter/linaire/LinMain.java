@@ -66,7 +66,7 @@ public class LinMain {
             )
     );
 
-    private static final int testNumber = 1000;
+    private static final int testNumber = 10;
     private static final ResultCollector collector = new ResultCollector(new int[]{1});
 
     public static void main(String[] args) throws FileNotFoundException {
