@@ -26,3 +26,7 @@ doc/report.pdf
 doc/report.toc
 
 output.log
+
+doc/report.lot
+
+doc/report.lof

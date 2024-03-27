@@ -422,7 +422,7 @@ mesures de performances sous forme graphique pour les deux machines.
 Les tests montrent que sur les deux machines de test, le mode concurrent est plus rapide
 que le mode linéaire, sauf pour le test 1. En effet, il se trouve que l'élément à rechercher 
 est au tout début de la base de données. Dans ce cas, la recherche linéaire est plus rapide
-que la recherche concurrente car elle ne nécessite pas de découpages en tâches parallèles, qui 
+que la recherche concurrente, car elle ne nécessite pas de découpages en tâches parallèles, qui 
 ont un coût en termes de temps d'exécution.
 
 Dans tous les autres cas, quand il est nécessaire de parcourir une grande partie de la base de données,
@@ -431,15 +431,15 @@ la recherche concurrente est effectivement plus efficace que la recherche linéa
 \subsection{Impact du nombre de découpages sur la performance}
 
 Les tests montrent que le nombre de découpages a un impact sur la performance de la recherche. 
-En effet, lorsqu'on effectue très peu de découpage (batch size élevé), la recherche concurrente
+En effet, lorsqu'on effectue très peu de découpage (batch size élevée), la recherche concurrente
 s'apparente presque à une recherche linéaire. Toutefois, dès le premier découpage (2 threads), 
 la recherche concurrente est déjà plus rapide que la recherche linéaire. Cette tendance 
 s'accentue avec le nombre de découpages, jusqu'à un certain plat. 
 
-Après 4 découpage, on atteint 16 Threads. Comme les machines de tests ne possèdent que 
+Après 4 découpages, on atteint 16 Threads. Comme les machines de tests ne possèdent que 
 10 et 12 cœurs, respectivement, la performance ne s'améliore pas avec l'ajout de nouveaux Threads. 
 De plus, on remarque qu'après un trop grand nombre de découpages (plus de 18), la 
-performance commence à diminuer. en effet, le nombre de Threads à ce moment là est 
+performance commence à diminuer. En effet, le nombre de Threads à ce moment-là est 
 supérieur à 250'000, ce qui est très grand et a un impact négatif sur la performance.
 
 \section{Conclusion}
@@ -452,7 +452,7 @@ sauf dans le cas spécifique où l'élément à rechercher est au tout début de
 
 De plus, nous avons pu constater que le nombre de découpages a un impact sur la performance de la recherche
 concurrente. En effet, un nombre trop faible revient à une recherche linéaire, ce qui est moins performant, 
-tandis qu'un nombre trop grand de découpages, crée un nombre trop grand de Threads, ce qui a un impact négatif
+tandis qu'un nombre trop grand de découpages crée un nombre trop grand de Threads, ce qui a un impact négatif
 sur la performance. 
 
 \clearpage
