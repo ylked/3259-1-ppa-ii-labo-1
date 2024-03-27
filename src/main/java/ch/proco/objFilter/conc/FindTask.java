@@ -87,7 +87,7 @@ public class FindTask extends RecursiveAction {
     @Override
     protected void compute() {
         // If we found an element and we are in searchAny mode, we stop the search
-        if (!all && !found.get()) {
+        if (!all && found.get()) {
             return;
         }
         // If the batch size is reached, we perform a simple linear search
@@ -96,12 +96,15 @@ public class FindTask extends RecursiveAction {
                 if (Filtre.filtre(data[i], filters)) {
                     result.add(data[i]);
 
+                    // Inform the other tasks that we found an element
+                    found.set(true);
+
                     // If we found an element, and we are in searchAny mode, we stop the search
                     if (!all) break;
                 }
                 // Each 100 elements, we check if we found an element, and we are in searchAny mode
                 // If so, we stop the search
-                if (!all && i % 100 == 0 && !found.get()) break;
+                if (!all && i % 100 == 0 && found.get()) break;
             }
         } else {
             // We split the work in two

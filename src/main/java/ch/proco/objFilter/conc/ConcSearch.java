@@ -33,7 +33,7 @@ public class ConcSearch {
      */
     public static Elem trouve(Elem[] data, List<FiltreElem> filters, int size) {
         ForkJoinPool pool = new ForkJoinPool();
-        FindTask task = new FindTask(data, filters, 0, data.length - 1, 1000);
+        FindTask task = new FindTask(data, filters, 0, data.length - 1, size);
         task.reset();
         pool.invoke(task);
         pool.close();
@@ -51,7 +51,7 @@ public class ConcSearch {
      */
     public static List<Elem> trouveTous(Elem[] data, List<FiltreElem> filters, int size) {
         ForkJoinPool pool = new ForkJoinPool();
-        FindTask task = new FindTask(data, filters, 0, data.length - 1, 1000, true);
+        FindTask task = new FindTask(data, filters, 0, data.length - 1, size, true);
         task.reset();
         pool.invoke(task);
         pool.close();
