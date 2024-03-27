@@ -1,0 +1,148 @@
+\documentclass[
+  french,
+  a4paper,
+]{scrartcl}
+
+\usepackage[pages=some]{background}
+%\ULCornerWallPaper{1}{arc-template.pdf}
+\backgroundsetup{firstpage = true, scale = 1, angle = 0, opacity = 1, contents = {\includegraphics[width = \paperwidth, height = \paperheight] {arc-template.pdf}}}
+
+\usepackage{listings}
+
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.98,0.98,0.98}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\usepackage{amsmath,amssymb}
+\usepackage[french]{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{lmodern}
+
+\usepackage{xcolor}
+\usepackage[margin=2cm,includehead,includefoot]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{etoolbox}
+
+\renewcommand{\arraystretch}{1.2}
+\setlength {\parindent}{0em}
+\setlength {\parskip}{1em}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\title{Laboratoire 1 : Comparaison de performances entre une recherche linéaire et une recherche concurrente}
+\subject{3259.1 Paradigmes de programmation avancés II $\cdot$ ISC3il-a}
+\author{Nima Dekhli\\
+    \small \href{mailto:nima.dekhli@he-arc.ch}{nima.dekhli@he-arc.ch}}
+\date{\today}
+
+
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+Dans le cadre du cours de paradigmes de programmation avancés II, il nous 
+a été demandé de réaliser un laboratoire qui consiste à comparer les performances
+de deux algorithmes de recherche, à savoir la recherche linéaire et la recherche
+concurrente. La recherche concurrente est une recherche dichotomique qui est
+exécutée en parallèle sur plusieurs threads, en utilisant un ForkJoinPool.
+
+La recherche s'effectue sur une base de données de films qui nous a été fournie. 
+Les méthodes de chargement de la base de données, ainsi que le filtrage 
+pour la recherche ont été fournies. Il nous a été demandé de spécifiquement réaliser
+la partie de recherche. 
+
+Ce rapport présente la comparaison de performances entre ces deux algorithmes, 
+ainsi que l'impact sur la performance du nombre de découpages 
+lors de la recherche concurrente.
+
+\section{Implémentation}
+
+\subsection{Recherche linéaire}
+
+La recherche linéaire est effectuée dans la classe 
+\lstinline|LinSearch|. Son implémentation est assez simple : 
+elle parcourt la base de données, sous forme de tableau, du premier élément 
+au dernier et applique la méthode de filtrage sur chacun d'entre eux. 
+Cette méthode de filtrage est fournie par la méthode \lstinline|Filtre.filtre()|.
+Elle prend en paramètre un élément de la base de données ainsi que la liste des filtres
+à appliquer et retourne un booléen indiquant si l'élément correspond aux filtres. 
+
+Dans le cas de la recherche d'un seul élément (méthode \lstinline|LinSearch.trouve()|), après 
+avoir trouvé le premier élément correspondant aux filtres, la recherche s'arrête 
+immédiatement. 
+
+Dans le cas de la recherche de tous les éléments (méthode \lstinline|LinSearch.trouveTous()|),
+à chaque fois qu'un élément correspondant aux filtres est trouvé, il est ajouté à
+une liste qui est retournée à la fin de la recherche, quand tous les éléments ont été
+parcourus.
+
+\subsection{Recherche concurrente}
+
+La recherche concurrente est effectuée dans la classe \lstinline|ConcSearch|.
+Elle utilise un ForkJoinPool pour exécuter la recherche en parallèle sur plusieurs threads.
+
+Chaque tâche récursive, implémentée par la classe \lstinline|FindTask|, étend la 
+classe abstraite \lstinline|RecursiveAction|. La méthode \lstinline|compute()| est 
+implémentée pour effectuer la recherche. 
+
+La recherche est effectuée de manière dichotomique : tant que l'intervalle de recherche 
+de la tâche courante est plus grand que le \textit{batch size}, alors la tâche 
+est divisée en deux sous-tâches qui sont exécutées en parallèle, grâce 
+à la méthode \lstinline{FindTask.fork()}. La fin de l'exécution des sous-tâches 
+est attendue grâce à la méthode \lstinline{FindTask.join()}.
+
+Une fois que les deux sous-tâches sont terminées, les résultats sont récupérés 
+et la variable \lstinline|result| est mise à jour. 
+
+Dans le cas de la recherche d'un seul élément (méthode \lstinline|ConcSearch.trouve()|),
+il est nécessaire d'arrêter la recherche lorsque un élément correspondant aux filtres
+est trouvé. La méthode s'exécutant en parallèle, il s'avère plus complexe que 
+dans le cas de la recherche linéaire. 
+
+
+
+\section{Résultats}
+
+\subsection{Protocole de tests}
+
+\subsection{Mesures}
+
+\section{Conclusion}
+\end{document}
