@@ -82,7 +82,7 @@ def plot_data(header, names, data, linear_data=None):
     if save:
         import platform
         osname = platform.system()
-        filename = "./results/result_" + osname + "_" + str(int(time.time()*1000)) + ".png"
+        filename = "./results/result_" + osname + "_" + str(int(time.time()*1000)) + ".pdf"
         plt.savefig(filename)
         print("INFO saved the figure in " + filename)
     else:
